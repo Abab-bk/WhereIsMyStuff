@@ -1,5 +1,6 @@
 package com.flower.whereismystuff
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,10 +19,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.flower.whereismystuff.pages.HomePage
+import com.flower.whereismystuff.pages.LibraryPage
+import com.flower.whereismystuff.pages.SettingsPage
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
+
+@SuppressLint("PermissionLaunchedDuringComposition")
+@OptIn(ExperimentalPermissionsApi::class)
 @Preview
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
+    val cameraPermissionState = rememberPermissionState(
+        permission = android.Manifest.permission.CAMERA
+    )
+
+    if (!cameraPermissionState.status.isGranted) {
+        cameraPermissionState.launchPermissionRequest()
+    }
+
     val navItemList = listOf(
         NavItemData("Home", Icons.Default.Home),
         NavItemData("Library", Icons.Default.Favorite),
@@ -54,11 +72,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     ) { innerPadding ->
-        ContentScreen(modifier = Modifier.padding(innerPadding))
+        ContentScreen(modifier = Modifier.padding(innerPadding), selectedNavItemIndex)
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier) {
-
+fun ContentScreen(modifier: Modifier = Modifier, selectedIndex : Int) {
+    when (selectedIndex) {
+        0 -> HomePage()
+        1 -> LibraryPage()
+        2 -> SettingsPage()
+    }
 }
