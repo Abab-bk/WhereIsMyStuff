@@ -20,13 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+enum class HomePage {
+    DEFAULT,
+    TAKE_PHOTO
+}
+
 @Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(modifier: Modifier = Modifier) {
     var queryText by remember { mutableStateOf("") }
     var searchBarActive by remember { mutableStateOf(false) }
-    var showTakePhoto by remember { mutableStateOf(false) }
+    var page by remember { mutableStateOf(HomePage.DEFAULT) }
 
     Column(
         modifier = Modifier
@@ -36,11 +41,13 @@ fun HomePage(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     )
     {
-        when(showTakePhoto) {
-            true -> {
-                CameraScreen()
+        when(page) {
+            HomePage.DEFAULT -> {
+                CameraScreen(onCancel = {
+                    page = HomePage.DEFAULT
+                })
             }
-            false -> {
+            HomePage.TAKE_PHOTO -> {
                 SearchBar(
                     query = queryText,
                     onQueryChange = {
@@ -53,7 +60,7 @@ fun HomePage(modifier: Modifier = Modifier) {
                     }
                 ) { }
                 Spacer(modifier = Modifier.height(20.dp))
-                Button(onClick = { showTakePhoto = true }) {
+                Button(onClick = { page = HomePage.TAKE_PHOTO }) {
                     Text(text = "Add New")
                 }
             }

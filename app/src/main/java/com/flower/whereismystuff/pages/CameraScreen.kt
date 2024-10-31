@@ -7,6 +7,8 @@ import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,7 +17,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
 @Composable
-fun CameraScreen(modifier: Modifier = Modifier) {
+fun CameraScreen(
+    modifier: Modifier = Modifier,
+    onCancel: () -> Unit
+) {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val cameraController = remember { LifecycleCameraController(context) }
@@ -34,5 +39,11 @@ fun CameraScreen(modifier: Modifier = Modifier) {
                     cameraController.bindToLifecycle(lifeCycleOwner)
                 }
         })
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = "Take Photo")
+        }
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = "Back")
+        }
     }
 }
