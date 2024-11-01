@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.flower.whereismystuff.persention.onboarding.OnBoardingScreen
 import com.flower.whereismystuff.ui.theme.WhereIsMyStuffTheme
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +25,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WhereIsMyStuffTheme {
-                MainScreen()
+//                MainScreen()
+                OnBoardingScreen()
             }
         }
     }
