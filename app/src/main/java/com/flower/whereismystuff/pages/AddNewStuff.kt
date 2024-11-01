@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Preview
 @Composable
-fun AddNewStuff(modifier: Modifier) {
+fun AddNewStuff(modifier: Modifier = Modifier) {
     Column {
         Button(onClick = { /*TODO*/ }) {
             Text(text = "Take Photo")
