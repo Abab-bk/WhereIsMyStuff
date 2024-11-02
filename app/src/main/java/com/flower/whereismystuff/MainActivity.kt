@@ -1,36 +1,50 @@
 package com.flower.whereismystuff
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.lifecycleScope
+import com.flower.whereismystuff.domain.usecases.AppEntryUseCases
 import com.flower.whereismystuff.persention.onboarding.OnBoardingScreen
+import com.flower.whereismystuff.persention.onboarding.OnBoardingViewModel
 import com.flower.whereismystuff.ui.theme.WhereIsMyStuffTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var useCases: AppEntryUseCases
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
+        var toMainScreen = false
+
+        lifecycleScope.launch {
+            useCases.readAppEntry().collect {
+                toMainScreen = it
+                Log.d("test", "toMainScreen set: $toMainScreen")
+            }
+        }
+
         enableEdgeToEdge()
+
         setContent {
             WhereIsMyStuffTheme {
-//                MainScreen()
-                OnBoardingScreen()
+                if (toMainScreen) {
+                    MainScreen()
+                } else {
+                    val viewModel: OnBoardingViewModel by viewModels()
+                    OnBoardingScreen(viewModel::onEvent)
+                }
             }
         }
     }

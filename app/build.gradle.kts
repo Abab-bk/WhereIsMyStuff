@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -49,7 +52,17 @@ android {
     }
 }
 
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
+    implementation(libs.hilt.android.v252)
+    kapt(libs.hilt.compiler)
+
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 

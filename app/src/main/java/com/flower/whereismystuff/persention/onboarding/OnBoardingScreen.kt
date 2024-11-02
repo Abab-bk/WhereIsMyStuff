@@ -22,20 +22,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.flower.whereismystuff.R
 import com.flower.whereismystuff.persention.onboarding.components.OnBoardingPage
 import com.flower.whereismystuff.persention.onboarding.components.PageIndicator
+import com.flower.whereismystuff.util.Constants
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Preview
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    event: (OnBoardingEvent) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,8 +59,8 @@ fun OnBoardingScreen() {
 
         fun nextPage() {
             scope.launch {
-                if (pagerState.currentPage == pages.count()) {
-                    // TODO: Navigation to main screen.
+                if (pagerState.currentPage == 2) {
+                    event(OnBoardingEvent.SaveAppEntry)
                 } else {
                     pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
                 }
@@ -83,7 +84,7 @@ fun OnBoardingScreen() {
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
