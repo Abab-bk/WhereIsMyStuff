@@ -16,5 +16,9 @@ val pages = listOf(
     Page(
         title = R.string.declare_title,
         description = R.string.declare_text,
-    )
+    ),
+    Page(
+        title = R.string.ready_title,
+        description = R.string.empty,
+    ),
 )

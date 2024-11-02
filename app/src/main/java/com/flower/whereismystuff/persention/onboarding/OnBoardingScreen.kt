@@ -13,16 +13,12 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -46,7 +42,6 @@ fun OnBoardingScreen() {
             .padding(Constants.OnBoardingPadding)
     ) {
         val scope = rememberCoroutineScope()
-        var showPermissionDialogue by remember { mutableStateOf(false) }
         val pagerState = rememberPagerState(initialPage = 0) {
             pages.size
         }
@@ -71,27 +66,17 @@ fun OnBoardingScreen() {
             }
         }
 
-        if (showPermissionDialogue) {
-            val permissionState = rememberMultiplePermissionsState(
-                permissions = listOf(
-                    android.Manifest.permission.CAMERA,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                onPermissionsResult = { result ->
-                    val allGranted = result.values.all { it }
-                    if (allGranted) {
-                        nextPage()
-                        showPermissionDialogue = false
-                    }
+        val permissionState = rememberMultiplePermissionsState(
+            permissions = listOf(
+                android.Manifest.permission.CAMERA
+            ),
+            onPermissionsResult = { result ->
+                val allGranted = result.values.all { it }
+                if (allGranted) {
+                    nextPage()
                 }
-            )
-
-            if (permissionState.allPermissionsGranted) {
-                showPermissionDialogue = false
-                nextPage()
-            } else {
-                permissionState.launchMultiplePermissionRequest()
             }
-        }
+        )
 
         HorizontalPager(state = pagerState) { index ->
             OnBoardingPage(page = pages[index])
@@ -114,7 +99,14 @@ fun OnBoardingScreen() {
 
             OnBoardingButtons(scope, buttonState, pagerState) {
                 if (pagerState.currentPage == 1) {
-                    showPermissionDialogue = true
+
+                    if (permissionState.allPermissionsGranted) {
+                        nextPage()
+                    } else {
+                        // only invoked from non-composable scope.
+                        permissionState.launchMultiplePermissionRequest()
+                    }
+
                     return@OnBoardingButtons
                 }
                 nextPage()
