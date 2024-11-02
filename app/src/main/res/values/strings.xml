@@ -4,7 +4,7 @@
     <string name="welcome_text">Welcome! \'Where is My Stuff\' is an app aimed at finding your stuff. Before we start, we need to do something to set up the app.</string>
     <string name="declare_text">To use Where Is My Stuff, you need to grant the camera permission.</string>
     <string name="welcome_title">Welcome</string>
-    <string name="declare_title">Need Permissions</string>
+    <string name="declare_title">Permissions</string>
     <string name="next_button">Next</string>
     <string name="empty">0</string>
     <string name="back_button">Back</string>
